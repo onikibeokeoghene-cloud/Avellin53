@@ -1,121 +1,121 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { lazy, Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import Layout from './components/Layout';
+import { useAuthStore } from './store/useAuthStore';
+import { Navigate, useLocation } from 'react-router-dom';
+
+// Lazy Loaded Pages
+const Home = lazy(() => import('./pages/Home'));
+const Shop = lazy(() => import('./pages/Shop'));
+const ProductDetail = lazy(() => import('./pages/ProductDetail'));
+const Cart = lazy(() => import('./pages/Cart'));
+const Checkout = lazy(() => import('./pages/Checkout'));
+const OrderConfirmation = lazy(() => import('./pages/OrderConfirmation'));
+const OrderHistory = lazy(() => import('./pages/OrderHistory'));
+const OrderDetail = lazy(() => import('./pages/OrderDetail'));
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
+const UserDashboard = lazy(() => import('./pages/UserDashboard'));
+const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'));
+const AdminOverview = lazy(() => import('./pages/admin/AdminOverview'));
+const AdminProducts = lazy(() => import('./pages/admin/AdminProducts'));
+const Wishlist = lazy(() => import('./pages/Wishlist'));
+const Contact = lazy(() => import('./pages/Contact'));
+const FAQ = lazy(() => import('./pages/FAQ'));
+const Shipping = lazy(() => import('./pages/Shipping'));
+const ReturnsExchanges = lazy(() => import('./pages/ReturnsExchanges'));
+const TrackOrder = lazy(() => import('./pages/TrackOrder'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+
+// Loading Fallback
+const PageLoader = () => (
+  <div className="min-h-[60vh] flex items-center justify-center">
+    <div className="w-12 h-12 border-4 border-accent border-t-secondary rounded-full animate-spin" />
+  </div>
+);
+
+const ProtectedRoute = ({ children, role }: { children: React.ReactNode, role?: 'customer' | 'admin' }) => {
+  const { isAuthenticated, user } = useAuthStore();
+  const location = useLocation();
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  if (role && user?.role !== role) {
+    return <Navigate to="/" replace />;
+  }
+
+  return <>{children}</>;
+};
+
+// Mock Pages for layout demonstration
+// App.tsx remains clean
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
+      <Toaster position="bottom-right" />
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="shop" element={<Shop />} />
+          <Route path="shop/:categorySlug" element={<Shop />} />
+          <Route path="product/:slug" element={<ProductDetail />} />
+          <Route path="cart" element={<Cart />} />
+          <Route path="checkout" element={<Checkout />} />
+          <Route path="order/confirmation" element={<OrderConfirmation />} />
+          <Route path="account/orders" element={<OrderHistory />} />
+          <Route path="account/orders/:orderId" element={<OrderDetail />} />
+          <Route path="new-arrivals" element={<Shop />} />
+          <Route path="category/men" element={<Shop />} />
+          <Route path="category/men/:subcategorySlug" element={<Shop />} />
+          <Route path="category/women" element={<Shop />} />
+          <Route path="category/women/:subcategorySlug" element={<Shop />} />
+          <Route path="category/skincare" element={<Shop />} />
+          <Route path="category/skincare/:subcategorySlug" element={<Shop />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+          <Route path="wishlist" element={<Wishlist />} />
+          <Route path="sale" element={<Shop />} />
+          <Route path="skincare" element={<Shop />} />
+          <Route path="faq" element={<FAQ />} />
+          <Route path="shipping" element={<Shipping />} />
+          <Route path="returns-exchanges" element={<ReturnsExchanges />} />
+          <Route path="track-order" element={<TrackOrder />} />
+          <Route path="contact" element={<Contact />} />
+          <Route 
+            path="account/*" 
+            element={
+              <ProtectedRoute>
+                <UserDashboard />
+              </ProtectedRoute>
+            } 
+          />
+        </Route>
+
+        <Route 
+          path="/admin" 
+          element={
+            <ProtectedRoute role="admin">
+              <AdminLayout />
+            </ProtectedRoute>
+          }
         >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+          <Route index element={<AdminOverview />} />
+          <Route path="products" element={<AdminProducts />} />
+          <Route path="orders" element={<div className="p-8 text-2xl font-heading">Order Management Coming Soon</div>} />
+          <Route path="users" element={<div className="p-8 text-2xl font-heading">User Management Coming Soon</div>} />
+        </Route>
+        
+        {/* Fallback route */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      </Suspense>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
