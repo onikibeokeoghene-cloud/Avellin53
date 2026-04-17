@@ -1,0 +1,12 @@
+{
+  "name": "avellin",
+  "version": "1.0.0",
+  "description": "A premium fashion and skincare platform built specifically for the Nigerian market.",
+  "scripts": {
+    "start:frontend": "cd frontend && npm start",
+    "start:backend": "cd backend && npm start",
+    "install:all": "cd frontend && npm install && cd ../backend && npm install"
+  },
+  "author": "",
+  "license": "ISC"
+}
