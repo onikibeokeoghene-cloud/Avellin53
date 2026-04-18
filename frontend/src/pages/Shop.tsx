@@ -48,7 +48,7 @@ const Shop = () => {
 
   const filteredProducts = ALL_PRODUCTS.filter(product => {
     // Collection Filters (from URL)
-    if (location.pathname === '/is_new_arrival' && !product.is_new_arrival) return false;
+    if (location.pathname === '/is_new_arrival' && !(product as any).is_new_arrival) return false;
     if (location.pathname === '/sale' && !(product.compare_at_price && product.compare_at_price > product.price)) return false;
 
     // Category Filter (sidebar + URL)
