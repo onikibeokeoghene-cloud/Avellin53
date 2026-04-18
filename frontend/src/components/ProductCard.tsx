@@ -16,6 +16,9 @@ interface Product {
   rating: number;
   reviewsCount: number;
   stock_quantity: number;
+  is_new_arrival?: boolean;
+is_featured?: boolean;
+
 }
 
 interface ProductCardProps {

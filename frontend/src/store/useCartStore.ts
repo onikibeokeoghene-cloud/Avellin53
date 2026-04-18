@@ -11,7 +11,8 @@ export interface CartItem {
   size: string;
   color: string;
   quantity: number;
-  stock_quantity: number;
+  stock_quantity: number; is_new_arrival?: boolean;
+is_featured?: boolean;
 }
 
 interface CartState {
