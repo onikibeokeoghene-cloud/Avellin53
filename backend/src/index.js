@@ -56,7 +56,7 @@ app.get('/api/health', (req, res) => {
   });
 });
   res.status(200).json({ status: 'ok', message: 'AVELLIN Secure API is live' });
-});
+
 
 // Global Error Handler
 app.use((err, req, res, next) => {
