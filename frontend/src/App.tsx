@@ -1,24 +1,19 @@
-import { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+// import other pages you have
 
 function App() {
-  useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/health`)
-      .then(res => res.json())
-      .then(data => console.log(data))
-      .catch(err => console.error(err));
-  }, []);
-
-return (
-  <div style={{ padding: "20px", fontFamily: "sans-serif" }}>
-    <h1>AVELLIN</h1>
-    <p>Welcome to your marketplace</p>
-
-    <section>
-      <h2>Status</h2>
-      <p>Backend connected successfully</p>
-    </section>
-  </div>
-);
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
+     
