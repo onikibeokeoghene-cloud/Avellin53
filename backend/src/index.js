@@ -15,10 +15,10 @@ const PORT = process.env.PORT || 5000;
 app.use(helmet()); 
 app.use(express.json({ limit: '10kb' })); 
 
-// CORS configuration
 const allowedOrigins = [
-  process.env.FRONTEND_URL || 'http://localhost:5173',
-  'https://avellin.vercel.app'
+  process.env.FRONTEND_URL,
+  'http://localhost:5173',
+  'https://avellin53.vercel.app'
 ];
 
 app.use(cors({
