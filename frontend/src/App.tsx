@@ -8,7 +8,17 @@ function App() {
       .catch(err => console.error(err));
   }, []);
 
-  return <div>Testing API...</div>;
+return (
+  <div style={{ padding: "20px", fontFamily: "sans-serif" }}>
+    <h1>AVELLIN</h1>
+    <p>Welcome to your marketplace</p>
+
+    <section>
+      <h2>Status</h2>
+      <p>Backend connected successfully</p>
+    </section>
+  </div>
+);
 }
 
 export default App;
