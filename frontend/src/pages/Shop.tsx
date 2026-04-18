@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
-import { 
-  ChevronDown, 
-  Grid, 
-  List as ListIcon, 
+import {
+  ChevronDown,
+  Grid,
+  List as ListIcon,
   X,
   ChevronLeft,
   ChevronRight,
@@ -26,7 +26,7 @@ const ALL_PRODUCTS = [
 
 const Shop = () => {
   const { categorySlug, subcategorySlug } = useParams();
-  const [ , ] = useSearchParams();
+  const [,] = useSearchParams();
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [viewType, setViewType] = useState<'grid' | 'list'>('grid');
   const [priceRange, setPriceRange] = useState([0, 500000]);
@@ -37,9 +37,9 @@ const Shop = () => {
   // Sync category state with URL
   useEffect(() => {
     if (categorySlug) {
-      const formatted = categorySlug === 'men' ? "Men's Fashion" : 
-                        categorySlug === 'women' ? "Women's Fashion" : 
-                        categorySlug === 'skincare' ? "Skincare" : "";
+      const formatted = categorySlug === 'men' ? "Men's Fashion" :
+        categorySlug === 'women' ? "Women's Fashion" :
+          categorySlug === 'skincare' ? "Skincare" : "";
       setSelectedCategories(formatted ? [formatted] : []);
     } else {
       setSelectedCategories([]);
@@ -48,9 +48,9 @@ const Shop = () => {
 
   const filteredProducts = ALL_PRODUCTS.filter(product => {
     // Collection Filters (from URL)
-    if (location.pathname === '/new-arrivals' && !product.is_new) return false;
+    if (location.pathname === '/is_new_arrival' && !product.is_new_arrival) return false;
     if (location.pathname === '/sale' && !(product.compare_at_price && product.compare_at_price > product.price)) return false;
-    
+
     // Category Filter (sidebar + URL)
     if (selectedCategories.length > 0) {
       const isMatch = selectedCategories.some(cat => {
@@ -60,14 +60,14 @@ const Shop = () => {
       });
       if (!isMatch) return false;
     }
-    
+
     // Subcategory Filter (URL)
     if (subcategorySlug) {
       const formattedSub = subcategorySlug.split('-').join(' ').toLowerCase();
       // Mock subcategory check: in a real app this would be a field like product.subcategory
       const productSub = (product as any).subcategory?.toLowerCase() || "";
       if (productSub !== formattedSub && !product.name.toLowerCase().includes(formattedSub)) {
-         return false;
+        return false;
       }
     }
 
@@ -119,7 +119,7 @@ const Shop = () => {
   return (
     <div className="bg-bg-light min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        
+
         {/* Breadcrumb & Title */}
         <div className="mb-12">
           <nav className="flex items-center gap-2 text-[10px] text-text-light uppercase tracking-[0.2em] mb-4 font-bold">
@@ -141,14 +141,14 @@ const Shop = () => {
               </>
             )}
           </nav>
-          
+
           <h1 className="text-6xl font-heading text-primary leading-tight">
             {subcategorySlug ? formatTitle(subcategorySlug) : (categorySlug ? (categorySlug === 'men' ? "Men's Collection" : categorySlug === 'women' ? "Women's Collection" : categorySlug.charAt(0).toUpperCase() + categorySlug.slice(1)) : 'Shop All Collections')}
           </h1>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-12">
-          
+
           {/* Sidebar Filter - Desktop */}
           <aside className="hidden lg:block w-72 flex-shrink-0 space-y-10">
             {/* Category */}
@@ -158,11 +158,11 @@ const Shop = () => {
                 {["Men's Fashion", "Women's Fashion", "Skincare"].map(cat => (
                   <label key={cat} className="flex items-center gap-3 cursor-pointer group">
                     <div className="relative flex items-center">
-                      <input 
-                        type="checkbox" 
+                      <input
+                        type="checkbox"
                         checked={selectedCategories.includes(cat)}
                         onChange={() => toggleCategory(cat)}
-                        className="peer h-5 w-5 appearance-none border border-accent bg-white checked:bg-primary checked:border-primary transition-all" 
+                        className="peer h-5 w-5 appearance-none border border-accent bg-white checked:bg-primary checked:border-primary transition-all"
                       />
                       <X className="absolute h-3 w-3 text-white opacity-0 peer-checked:opacity-100 left-1 pointer-events-none" />
                     </div>
@@ -176,35 +176,35 @@ const Shop = () => {
             <div>
               <h3 className="text-xs font-bold uppercase tracking-[0.2em] mb-6 border-b border-accent pb-4 text-primary">Price Range</h3>
               <div className="space-y-6">
-                <input 
-                  type="range" 
-                  min="0" 
-                  max="500000" 
+                <input
+                  type="range"
+                  min="0"
+                  max="500000"
                   step="5000"
                   value={priceRange[1]}
                   onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-                  className="w-full h-1 bg-accent appearance-none cursor-pointer accent-secondary" 
+                  className="w-full h-1 bg-accent appearance-none cursor-pointer accent-secondary"
                 />
                 <div className="flex items-center gap-4">
                   <div className="relative flex-1">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[10px] text-text-light font-bold">₦</span>
-                    <input 
-                      type="number" 
-                      value={priceRange[0]} 
+                    <input
+                      type="number"
+                      value={priceRange[0]}
                       onChange={(e) => setPriceRange([parseInt(e.target.value) || 0, priceRange[1]])}
-                      className="w-full pl-7 pr-3 py-3 text-xs border border-accent bg-white focus:outline-none focus:border-secondary font-bold" 
-                      placeholder="Min" 
+                      className="w-full pl-7 pr-3 py-3 text-xs border border-accent bg-white focus:outline-none focus:border-secondary font-bold"
+                      placeholder="Min"
                     />
                   </div>
                   <span className="text-text-light">—</span>
                   <div className="relative flex-1">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[10px] text-text-light font-bold">₦</span>
-                    <input 
-                      type="number" 
-                      value={priceRange[1]} 
+                    <input
+                      type="number"
+                      value={priceRange[1]}
                       onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value) || 0])}
-                      className="w-full pl-7 pr-3 py-3 text-xs border border-accent bg-white focus:outline-none focus:border-secondary font-bold" 
-                      placeholder="Max" 
+                      className="w-full pl-7 pr-3 py-3 text-xs border border-accent bg-white focus:outline-none focus:border-secondary font-bold"
+                      placeholder="Max"
                     />
                   </div>
                 </div>
@@ -216,12 +216,11 @@ const Shop = () => {
               <h3 className="text-sm font-bold uppercase tracking-wider mb-4 border-b border-accent pb-2">Size</h3>
               <div className="grid grid-cols-3 gap-2">
                 {['XS', 'S', 'M', 'L', 'XL', 'XXL', '100ml', '200ml', '500ml'].map(size => (
-                  <button 
+                  <button
                     key={size}
                     onClick={() => setSelectedSizes(prev => prev.includes(size) ? prev.filter(s => s !== size) : [...prev, size])}
-                    className={`text-[10px] py-2 border transition-all ${
-                      selectedSizes.includes(size) ? 'bg-primary text-white border-primary' : 'bg-white text-text-dark border-accent hover:border-secondary'
-                    }`}
+                    className={`text-[10px] py-2 border transition-all ${selectedSizes.includes(size) ? 'bg-primary text-white border-primary' : 'bg-white text-text-dark border-accent hover:border-secondary'
+                      }`}
                   >
                     {size}
                   </button>
@@ -234,7 +233,7 @@ const Shop = () => {
               <h3 className="text-sm font-bold uppercase tracking-wider mb-4 border-b border-accent pb-2">Rating</h3>
               <div className="space-y-2">
                 {[4, 3].map(rating => (
-                  <button 
+                  <button
                     key={rating}
                     onClick={() => setSelectedRating(selectedRating === rating ? null : rating)}
                     className={`flex items-center gap-2 text-sm w-full transition-colors ${selectedRating === rating ? 'text-secondary' : 'text-text-dark hover:text-secondary'}`}
@@ -250,7 +249,7 @@ const Shop = () => {
               </div>
             </div>
 
-            <button 
+            <button
               onClick={clearFilters}
               className="w-full py-3 text-xs uppercase tracking-widest border border-primary text-primary hover:bg-primary hover:text-white transition-all font-bold"
             >
@@ -260,16 +259,16 @@ const Shop = () => {
 
           {/* Main Content */}
           <main className="flex-1">
-            
+
             {/* Top Bar */}
             <div className="bg-white border border-accent p-4 flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
               <div className="text-xs text-text-light font-medium">
                 Showing <span className="text-primary font-bold">{filteredProducts.length}</span> of <span className="text-primary font-bold">{ALL_PRODUCTS.length}</span> products
               </div>
-              
+
               <div className="flex items-center gap-4 w-full md:w-auto">
                 {/* Mobile Filter Trigger */}
-                <button 
+                <button
                   onClick={() => setIsFilterDrawerOpen(true)}
                   className="lg:hidden flex items-center gap-2 text-xs uppercase tracking-widest font-bold border border-accent px-4 py-2 hover:bg-accent transition-colors"
                 >
@@ -288,13 +287,13 @@ const Shop = () => {
                 </div>
 
                 <div className="hidden sm:flex border border-accent">
-                  <button 
+                  <button
                     onClick={() => setViewType('grid')}
                     className={`p-2 transition-colors ${viewType === 'grid' ? 'bg-primary text-white' : 'hover:bg-accent'}`}
                   >
                     <Grid className="h-4 w-4" />
                   </button>
-                  <button 
+                  <button
                     onClick={() => setViewType('list')}
                     className={`p-2 transition-colors ${viewType === 'list' ? 'bg-primary text-white' : 'hover:bg-accent'}`}
                   >
@@ -308,8 +307,8 @@ const Shop = () => {
             {activeFilters.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-6">
                 {activeFilters.map(filter => (
-                  <span 
-                    key={filter.id} 
+                  <span
+                    key={filter.id}
                     className="flex items-center gap-2 bg-accent/50 border border-accent px-3 py-1.5 text-[10px] uppercase tracking-widest font-bold text-primary"
                   >
                     {filter.label}
@@ -357,14 +356,14 @@ const Shop = () => {
       <AnimatePresence>
         {isFilterDrawerOpen && (
           <>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.5 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 bg-black z-50 lg:hidden"
               onClick={() => setIsFilterDrawerOpen(false)}
             />
-            <motion.div 
+            <motion.div
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
@@ -375,7 +374,7 @@ const Shop = () => {
                 <h2 className="text-xl font-heading">Filters</h2>
                 <button onClick={() => setIsFilterDrawerOpen(false)}><X className="h-6 w-6" /></button>
               </div>
-              
+
               <div className="space-y-8 pb-10">
                 {/* Categories */}
                 <div>
@@ -383,11 +382,11 @@ const Shop = () => {
                   <div className="space-y-3">
                     {["Men's Fashion", "Women's Fashion", "Skincare"].map(cat => (
                       <label key={cat} className="flex items-center gap-3">
-                        <input 
-                          type="checkbox" 
+                        <input
+                          type="checkbox"
                           checked={selectedCategories.includes(cat)}
                           onChange={() => toggleCategory(cat)}
-                          className="w-5 h-5 accent-secondary" 
+                          className="w-5 h-5 accent-secondary"
                         />
                         <span className="text-sm">{cat}</span>
                       </label>
@@ -400,12 +399,11 @@ const Shop = () => {
                   <h3 className="text-sm font-bold uppercase tracking-wider mb-4">Size</h3>
                   <div className="flex flex-wrap gap-2">
                     {['XS', 'S', 'M', 'L', 'XL', 'XXL', '100ml', '200ml'].map(size => (
-                      <button 
+                      <button
                         key={size}
                         onClick={() => setSelectedSizes(prev => prev.includes(size) ? prev.filter(s => s !== size) : [...prev, size])}
-                        className={`px-4 py-2 text-xs border transition-all ${
-                          selectedSizes.includes(size) ? 'bg-primary text-white' : 'bg-white border-accent'
-                        }`}
+                        className={`px-4 py-2 text-xs border transition-all ${selectedSizes.includes(size) ? 'bg-primary text-white' : 'bg-white border-accent'
+                          }`}
                       >
                         {size}
                       </button>
